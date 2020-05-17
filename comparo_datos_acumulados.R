@@ -14,6 +14,12 @@
       plot(p[["dias"]],p[["cum"]],log="y",type="l",main=title,xlab=xtitle,ylab=ytitle)
  }
 
+ oplot_casos <-function(data,col=col,...)
+ {
+      data_set=subset(data,...)
+      p=acumula_serie(data_set)
+      lines(p[["dias"]],p[["cum"]],col=col)
+ }
  acumula_serie <- function(data)
  {
        c=as.Date(data$fecha_fis)
@@ -32,11 +38,8 @@
  }
 
  #cargo datos nacionales publicos
+ #http://datos.salud.gob.ar/dataset/covid-19-casos-registrados-en-la-republica-argentina
  d_nac <- read.csv("covid19casos.csv")
-
- pdf("acumulado_confirmados_datos_publicos.pdf")
- plot_casos(d_nac,clasificacion_resumen=="Confirmado" & provincia_carga=="Córdoba")
- dev.off()
 
  #cargo datos provinciales confidenciales
  d_prov <- read.csv("SISA-12-05_pilar.csv")
@@ -46,9 +49,20 @@
  colnames(d_prov)[which(colnames(d_prov)=="CLASIF_RESUMEN")]="clasificacion_resumen"
  #acomodo el formato de la fecha que no es ISO
  d_prov$fecha_fis=as.Date(d_prov$fecha_fis,format="%d/%m/%Y")
- #which(is.na(d_prov$fecha_fis))
+ #a los asintomáticos les asigno la fecha de inicio de sintomas 
+ #que esta tambien en otro formato
+ for(w in which(is.na(d_prov$fecha_fis)))
+ {
+         d_prov$fecha_fis[w]=as.Date(substring(d_prov$Toma_MUESTRA[w],1,10),format="%d-%m-%Y")
+ }
 
 
- pdf("acumulado_confirmados_datos_confid.pdf")
- plot_casos(d_prov,clasificacion_resumen=="Confirmado" & provincia_carga=="Córdoba")
+ #comparo los datos provinciales con los nacionales, esto parece confirmar que en los
+ #datos nacionales se carga para los asintomáticos la fecha de inicio de síntomas como
+ #la fecha del hisopado
+
+ pdf("acumulado_confirmados_datos_vs.pdf")
+ plot_casos(d_nac,clasificacion_resumen=="Confirmado" & provincia_carga=="Córdoba")
+ oplot_casos(d_prov,col="red",clasificacion_resumen=="Confirmado" & provincia_carga=="Córdoba")
+ oplot_casos(d_prov,col="blue",clasificacion_resumen=="Confirmado")
  dev.off()
