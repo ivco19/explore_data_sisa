@@ -1,0 +1,8 @@
+Notas varias sobre el proyecto
+N001: extrañamente los datos de la base nacional siempre hay una fecha fis
+      pero en la base sisa de pilar muchos casos no tiene fis... me parece
+      que es por los asintomáticos, a nivel nacional algo estan haciendo
+      por ejemplo estan poniendo la fecha de isopado
+
+Archivos:
+F001: ./comparo_datos_acumulados.R
