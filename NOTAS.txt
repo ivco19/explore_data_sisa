@@ -3,6 +3,11 @@ N001: extrañamente los datos de la base nacional siempre hay una fecha fis
       pero en la base sisa de pilar muchos casos no tiene fis... me parece
       que es por los asintomáticos, a nivel nacional algo estan haciendo
       por ejemplo estan poniendo la fecha de isopado
+N002: Asi como faltan cargar fechas desde el fis y hay fechas intermedias que
+      faltan yo interpreto asi: TODOS FIS. SI no INTERNADO, tomo FIS. SI no
+      CUIDADO INTENSIVO, Tomo Internado.
+N003: Lo mismo que antes... Si NO fecha de ALTA, tomamos la fecha modificacion
+      del diagnostico. 
 
 Archivos:
 F001: ./comparo_datos_acumulados.R
