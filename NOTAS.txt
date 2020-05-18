@@ -7,7 +7,20 @@ N002: Asi como faltan cargar fechas desde el fis y hay fechas intermedias que
       faltan yo interpreto asi: TODOS FIS. SI no INTERNADO, tomo FIS. SI no
       CUIDADO INTENSIVO, Tomo Internado.
 N003: Lo mismo que antes... Si NO fecha de ALTA, tomamos la fecha modificacion
-      del diagnostico. 
+      del diagnostico. Según Pilar usemos siempre FECHA_MOD_DIAG, ya que el
+      alta se puede demorar por otras cosas y no por que no se halla curado de
+      covid19.
 
 Archivos:
 F001: ./comparo_datos_acumulados.R
+      Este file es para hacer una comparacion con los datos nacionales
+      abiertos, la idea es ver si es posible en un futuro reemplazar los datos
+      confidenciales de córdoba con los datos abiertos para poder liberar el
+      analisis y además realizar analisis para otras provincias.
+
+F002: ./funciones.R aquí puse funciones de uso común, en particular deberiamos
+      de fucionar las dos funciones de lectura de datos.
+
+F003: ./build_data_series_to_model.R
+      Este código lo estoy haciendo para construir la serie de datos
+      temporales que hacen falta para ajustar el modelo que haga Marcelo
