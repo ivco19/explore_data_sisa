@@ -10,6 +10,8 @@ N003: Lo mismo que antes... Si NO fecha de ALTA, tomamos la fecha modificacion
       del diagnostico. Según Pilar usemos siempre FECHA_MOD_DIAG, ya que el
       alta se puede demorar por otras cosas y no por que no se halla curado de
       covid19.
+N004: Despues de ver los histogramas me parece que en vez de promedio usar la
+      mediana.
 
 Archivos:
 F001: ./comparo_datos_acumulados.R
