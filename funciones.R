@@ -1,20 +1,20 @@
- plot_casos <-function(data,fecha_min,title=title)
+ plot_casos <-function(data,fecha_var,fecha_min,title=title,...)
  {
-      p=acumula_serie(data,fecha_min)
+      p=acumula_serie(data,fecha_var,fecha_min)
 
       #ytitle=paste("Número de casos",data$clasificacion_resumen[1])
       ytitle="Número de casos"
       xtitle=paste("Dias desde",p[["fecha_min"]])
-      plot(p[["dias"]],p[["cum"]],log="y",type="l",main=title,xlab=xtitle,ylab=ytitle)
+      plot(p[["dias"]],p[["cum"]],log="y",type="l",main=title,xlab=xtitle,ylab=ytitle,...)
  }
- oplot_casos <-function(data,fecha_min,col=col)
+ oplot_casos <-function(data,fecha_var,fecha_min,col=col)
  {
-      p=acumula_serie(data,fecha_min)
+      p=acumula_serie(data,fecha_var,fecha_min)
       lines(p[["dias"]],p[["cum"]],col=col)
  }
- acumula_serie <- function(data,fecha_min)
+ acumula_serie <- function(data,fecha_var,fecha_min)
  {
-       c=as.Date(data$fecha_fis)
+       c=as.Date(data[[fecha_var]])
        c=c[!is.na(c)]
        c = (as.numeric(c-fecha_min))
        h=hist(c,breaks=max(c),plot=FALSE)
@@ -42,6 +42,32 @@
              d_prov$fecha_fis[w]=as.Date(substring(d_prov$Toma_MUESTRA[w],1,10),format="%d-%m-%Y")
      }
     
-      return(list(nac=d_nac,prov=d_prov))
+     d_prov$FECHA_MOD_DIAG=as.Date(d_prov$FECHA_MOD_DIAG,format="%d/%m/%Y")
+     d_prov$FECHA_FALLECIMIENTO=as.Date(d_prov$FECHA_FALLECIMIENTO,format="%d/%m/%Y")
+     return(list(nac=d_nac,prov=d_prov))
+ }
+ split_cases <- function(data)
+ {
+     clasif=c(
+      "Caso confirmado - No Activo por criterio de laboratorio"            ,# [1]
+      "Caso confirmado - No activo (por tiempo de evolución)"              ,# [2]
+      "Caso confirmado - Activo "                                          ,# [3]
+      "Caso confirmado - Activo Internado"                                 ,# [4]
+      "Caso confirmado - Fallecido"                                        ,# [5]
+      "Caso confirmado - No activo (por laboratorio y tiempo de evolución)")# [6]
+     confirmados=subset(data,clasificacion_resumen=="Confirmado")
+     recuperados=subset(data,
+            	   (CLASIFICACION==clasif[1] |
+            	   CLASIFICACION==clasif[2] |
+            	   CLASIFICACION==clasif[6])
+                    )
+     activos=subset(data,
+            	    CLASIFICACION==clasif[3] |
+            	    CLASIFICACION==clasif[4] )
+     
+     fallecidos=subset(data,
+            	    CLASIFICACION==clasif[5] )
+
+     return(list(confirmados=confirmados,activos=activos,recuperados=recuperados,fallecidos=fallecidos))
  }
 
