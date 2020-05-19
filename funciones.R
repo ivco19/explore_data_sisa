@@ -1,27 +1,27 @@
- plot_casos <-function(data,fecha_var,fecha_min,title=title,...)
+ plot_casos <-function(data,fecha_var,fecha_min,breaks,title=title,...)
  {
-      p=acumula_serie(data,fecha_var,fecha_min)
+      p=acumula_serie(data,fecha_var,fecha_min,breaks)
 
       #ytitle=paste("Número de casos",data$clasificacion_resumen[1])
       ytitle="Número de casos"
       xtitle=paste("Dias desde",p[["fecha_min"]])
       plot(p[["dias"]],p[["cum"]],log="y",type="l",main=title,xlab=xtitle,ylab=ytitle,...)
  }
- oplot_casos <-function(data,fecha_var,fecha_min,col=col)
+ oplot_casos <-function(data,fecha_var,fecha_min,breaks,col=col)
  {
-      p=acumula_serie(data,fecha_var,fecha_min)
+      p=acumula_serie(data,fecha_var,fecha_min,breaks)
       lines(p[["dias"]],p[["cum"]],col=col)
  }
- acumula_serie <- function(data,fecha_var,fecha_min)
+ acumula_serie <- function(data,fecha_var,fecha_min,breaks)
  {
        c=as.Date(data[[fecha_var]])
        c=c[!is.na(c)]
        c = (as.numeric(c-fecha_min))
-       h=hist(c,breaks=max(c),plot=FALSE)
+       h=hist(c,breaks,plot=FALSE)
        cum=cumsum(h$counts)
        dias=h$breaks[1:(length(h$breaks)-1)]
  
-       return(list(dias=dias,cum=cum,fecha_min=fecha_min))
+       return(list(dias=h$mids,cum=cum,his=h$counts,fecha_min=fecha_min))
  }
  load_data <-function()
  {
