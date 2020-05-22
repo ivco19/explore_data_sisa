@@ -23,30 +23,6 @@
  
        return(list(dias=h$mids,cum=cum,his=h$counts,fecha_min=fecha_min))
  }
- load_data <-function()
- {
-     d_nac <- read.csv("covid19casos.csv")
-    
-     #cargo datos provinciales confidenciales
-     d_prov <- read.csv("SISA-12-05_pilar.csv")
-     #renombro tags para poder usar las mismas expresiones
-     colnames(d_prov)[which(colnames(d_prov)=="Fecha1rSintoma")]="fecha_fis"
-     colnames(d_prov)[which(colnames(d_prov)=="PROVINCIA_CARGA")]="provincia_carga"
-     colnames(d_prov)[which(colnames(d_prov)=="CLASIF_RESUMEN")]="clasificacion_resumen"
-     #acomodo el formato de la fecha que no es ISO
-     d_prov$fecha_fis=as.Date(d_prov$fecha_fis,format="%d/%m/%Y")
-     #a los asintomáticos les asigno la fecha de inicio de sintomas 
-     #que está tambien en otro formato
-     for(w in which(is.na(d_prov$fecha_fis)))
-     {
-             d_prov$fecha_fis[w]=as.Date(substring(d_prov$Toma_MUESTRA[w],1,10),format="%d-%m-%Y")
-     }
-    
-     d_prov$FECHA_MOD_DIAG=as.Date(d_prov$FECHA_MOD_DIAG,format="%d/%m/%Y")
-     d_prov$FECHA_FALLECIMIENTO=as.Date(d_prov$FECHA_FALLECIMIENTO,format="%d/%m/%Y")
-     return(list(nac=d_nac,prov=d_prov))
- }
-
  repair_date <-function(char)
  { 
 	 charo=char
@@ -62,6 +38,35 @@
 		 }
 	 }
 	 return(charo)
+ }
+
+ load_data_sisa <-function()
+ {
+     #cargo datos provinciales confidenciales
+     d_prov <- read.csv("BM_2020.05.15.csv")
+     #renombro tags para poder usar las mismas expresiones
+     colnames(d_prov)[which(colnames(d_prov)=="Fecha1rSintoma")]="fis"
+     colnames(d_prov)[which(colnames(d_prov)=="PROVINCIA_CARGA")]="provincia_carga"
+     colnames(d_prov)[which(colnames(d_prov)=="CLASIF_RESUMEN")]="clasificacion_resumen"
+     #acomodo el formato de la fecha que no es ISO
+     d_prov$fis=as.Date(d_prov$fis,format="%d/%m/%Y")
+     #a los asintomáticos les asigno la fecha de inicio de sintomas 
+     #que está tambien en otro formato
+     for(w in which(is.na(d_prov$fis)))
+     {
+             d_prov$fis[w]=as.Date(substring(d_prov$Toma_MUESTRA[w],1,10),format="%d-%m-%Y")
+     }
+    
+     d_prov$FECHA_MOD_DIAG=as.Date(d_prov$FECHA_MOD_DIAG,format="%d/%m/%Y")
+     d_prov$FECHA_FALLECIMIENTO=as.Date(d_prov$FECHA_FALLECIMIENTO,format="%d/%m/%Y")
+     return(d_prov)
+ }
+ load_data_nac <-function()
+ {
+     data <- read.csv2("covid_19_casos.csv")
+     data$fis                 = as.Date(data$fis)
+     data$fecha_diagnostico   = as.Date(data$fecha_diagnostico)
+     data$fecha_fallecimiento = as.Date(data$fecha_fallecimiento)
  }
 
 

@@ -5,9 +5,8 @@
  #comparo los datos provinciales con los nacionales, esto parece confirmar que en los
  #datos nacionales se carga para los asintomáticos la fecha de inicio de síntomas como
  #la fecha del hisopado
- dd=load_data()
- d_nac=dd[["nac"]]
- d_prov=dd[["prov"]]
+ d_prov=load_data_prov()
+ d_nac=load_data_nac()
 
  
  c_nac=subset(d_nac,(clasificacion_resumen=="Confirmado" & provincia_carga=="Córdoba"))
