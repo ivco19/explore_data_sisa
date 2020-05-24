@@ -12,7 +12,8 @@ N003: Lo mismo que antes... Si NO fecha de ALTA, tomamos la fecha modificacion
       covid19.
 N004: Despues de ver los histogramas me parece que en vez de promedio usar la
       mediana.
-
+N005: No encontre en la Base Madre fechas ni datos de cuidados intensivos.
+      Uso fecha ineternacion
 Archivos:
 F001: ./comparo_datos_acumulados.R
       Este file es para hacer una comparacion con los datos nacionales

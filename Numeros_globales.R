@@ -1,5 +1,7 @@
 #leemos los datos
-datos=prepara_datos()
+source('funciones_NG.R')
+#datos=prepara_datos()
+datos=prepara_datos('bm_20.05.15-V2.csv','BM')
 
 rec=recuperados(datos)
 fal=fallecidos(datos)
