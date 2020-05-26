@@ -86,8 +86,9 @@ prepara_datos <- function(name, type) {
 }
 
 # Funcion para sacar solo los datos de los fallecidos.... devuelve los datos en forma de data.frame
-fallecidos <- function(data) {
+fallecidos <- function(data,verb) {
   if (missing(data)) data <- prepara_datos()
+  if (missing(verb)) verb <- TRUE
 
   ei0 <- which(data$edad < 60)
   ei1 <- which(data$edad >= 60)
@@ -122,25 +123,26 @@ fallecidos <- function(data) {
   # esto podria ser el lenght e1 o e0
   Nfat <- c(length(falle$fecha_fis), length(falle$fecha_fis[e0]), length(falle$fecha_fis[e1]))
   TasaDMuerte <- Nfat / Ninf
-
-  print(c("Summario:"))
-  print(c("Nfallecidos:", Nfat, "Tasa de Mortalidad (mu):", TasaDMuerte))
-  print("<Tiempos Medios>")
-  print(c("Tiempo desde FIS:", tau_fis))
-  print(c("Tiempo desde Internacion:", tau_int))
-  print(c("Tiempo desde CUI:", tau_cui))
-
+  if(verb){
+     print(c("Summario:"))
+     print(c("Nfallecidos:", Nfat, "Tasa de Mortalidad (mu):", TasaDMuerte))
+     print("<Tiempos Medios>")
+     print(c("Tiempo desde FIS:", tau_fis))
+     print(c("Tiempo desde Internacion:", tau_int))
+     print(c("Tiempo desde CUI:", tau_cui))
+  }
   return(list(
     Nfat = Nfat, TasaDeMue = TasaDMuerte,
     tfis = tau_fis, tcui = tau_cui, tint = tau_int,
     Edades = falle$edad,
     D_fis = D_fis, D_cui = D_cui, D_int = D_int,
-    F_mue = F_mue, F_int = F_int, F_cui = F_cui, F_fis = F_fis
+    mue = F_mue, int = F_int, cui = F_cui, fis = F_fis
   ))
 }
 
-recuperados <- function(data) {
+recuperados <- function(data,verb) {
   if (missing(data)) data <- prepara_datos()
+  if (missing(verb)) verb <- TRUE
 
   ei0 <- which(data$edad < 60)
   ei1 <- which(data$edad >= 60)
@@ -181,19 +183,56 @@ recuperados <- function(data) {
   Nrec1 <- length(recu$fecha_fis[e1])
   Nrec <- c(Nrec, Nrec0, Nrec1)
   TasaDRecu <- Nrec / Ninf
-
-  print(c("Summario:"))
-  print(c("NRecuperados:", Nrec, "Tasa de recuperabilidad (gamma):", TasaDRecu))
-  print("<Tiempos Medios>")
-  print(c("Tiempo desde FIS (<60,>60):", tau_fis))
-  print(c("Tiempo desde Internacion(<60,>60):", tau_int))
-  print(c("Tiempo desde CUI(<60,>60):", tau_cui))
-
+  if(verb){
+     print(c("Summario:"))
+     print(c("NRecuperados:", Nrec, "Tasa de recuperabilidad (gamma):", TasaDRecu))
+     print("<Tiempos Medios>")
+     print(c("Tiempo desde FIS (<60,>60):", tau_fis))
+     print(c("Tiempo desde Internacion(<60,>60):", tau_int))
+     print(c("Tiempo desde CUI(<60,>60):", tau_cui))
+  }
   return(list(
     Nrec = Nrec, TasaDeRecu = TasaDRecu,
     tfis = tau_fis, tcui = tau_cui, tint = tau_int,
     Edades = recu$edad,
     D_fis = D_fis, D_cui = D_cui, D_int = D_int,
-    R_alta = R_alta, R_int = R_int, R_cui = R_cui, R_fis = R_fis
+    alta = R_alta, int = R_int, cui = R_cui, fis = R_fis
   ))
 }
+
+todos <- function(data,verb) {
+  if (missing(data)) data <- prepara_datos()
+  if (missing(verb)) verb <- TRUE
+
+  ei0 <- which(data$edad < 60)
+  ei1 <- which(data$edad >= 60)
+  NInf <- c(length(data$fecha_fis), length(data$fecha_fis[ei0]), length(data$fecha_fis[ei1]))
+  # //////////////////
+  activo <- subset(data, ClassSel == "Activo")
+  falle <- subset(data, ClassSel == "Fallecido")
+  recu <- subset(data, ClassSel == "Recuperado")
+  
+  e0 <- which(activo$edad < 60)
+  e1 <- which(activo$edad >= 60)
+  Nact <- c(length(activo$fecha_fis), length(activo$fecha_fis[ei0]), length(activo$fecha_fis[ei1]))
+  
+  e0 <- which(falle$edad < 60)
+  e1 <- which(falle$edad >= 60)
+  NFal <- c(length(falle$fecha_fis), length(falle$fecha_fis[ei0]), length(falle$fecha_fis[ei1]))
+  
+  e0 <- which(recu$edad < 60)
+  e1 <- which(recu$edad >= 60)
+  NRec <- c(length(recu$fecha_fis), length(recu$fecha_fis[ei0]), length(recu$fecha_fis[ei1]))
+
+  if(verb){
+     print(c("Summario:"))
+  }
+  return(list(
+    NInf = NInf, EdadInf=data$edad, FisInf=data$fecha_fis,
+    NAct = Nact, EdadAct=activo$edad, FisAct=activo$fecha_fis,
+    NFal = NFal, EdadFal=falle$edad, FisAct=falle$fecha_fis, 
+    NRec = NRec, EdadRec=recu$edad, FisRec=recu$fecha_fis
+  ))
+}
+
+
