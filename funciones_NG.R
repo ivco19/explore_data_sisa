@@ -68,7 +68,8 @@ prepara_datos <- function(name, type) {
     #### Posibles valores de ClassSel = [Fallecido, Recuperado, Activo]
     w <- which(ClassSel == "NO")
     if (length(w) != 0) {
-      print("OJO< NO ACTIVO PERO NO RECUPERADO NI FALLECIDO")
+      print(c("OJO< NO ACTIVO PERO NO RECUPERADO NI FALLECIDO",length(w),w))
+      ClassSel[w] <- "Recuperado"
     }
 
     ##### QUIERO LA MISMA DATA ASI QUE LIMPIO Y USO LO QUE NECESITO
@@ -214,24 +215,24 @@ todos <- function(data,verb) {
   
   e0 <- which(activo$edad < 60)
   e1 <- which(activo$edad >= 60)
-  Nact <- c(length(activo$fecha_fis), length(activo$fecha_fis[ei0]), length(activo$fecha_fis[ei1]))
+  Nact <- c(length(activo$edad), length(e0), length(e1))
   
   e0 <- which(falle$edad < 60)
   e1 <- which(falle$edad >= 60)
-  NFal <- c(length(falle$fecha_fis), length(falle$fecha_fis[ei0]), length(falle$fecha_fis[ei1]))
+  NFal <- c(length(falle$fecha_fis), length(e0), length(e1))
   
   e0 <- which(recu$edad < 60)
   e1 <- which(recu$edad >= 60)
-  NRec <- c(length(recu$fecha_fis), length(recu$fecha_fis[ei0]), length(recu$fecha_fis[ei1]))
+  NRec <- c(length(recu$fecha_fis), length(e0), length(e1))
 
   if(verb){
      print(c("Summario:"))
   }
   return(list(
-    NInf = NInf, EdadInf=data$edad, FisInf=data$fecha_fis,
-    NAct = Nact, EdadAct=activo$edad, FisAct=activo$fecha_fis,
-    NFal = NFal, EdadFal=falle$edad, FisAct=falle$fecha_fis, 
-    NRec = NRec, EdadRec=recu$edad, FisRec=recu$fecha_fis
+    NInf = NInf, EdadInf=data$edad, FInf=data$fecha_fis,
+    NAct = Nact, EdadAct=activo$edad, FAct=activo$fecha_fis,
+    NFal = NFal, EdadFal=falle$edad, FFal=falle$mue, 
+    NRec = NRec, EdadRec=recu$edad, FRec=recu$alta
   ))
 }
 
