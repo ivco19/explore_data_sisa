@@ -1,5 +1,6 @@
-do_pl <- function(sset)
+do_pl <- function(sset,Ndias)
 {
+if(missing(Ndias)) Ndias=6
 if(missing(sset)) {
 sset = 0
 print('Recordar args: 0 todos, 1 < 60 años, 2 > 60 años')
@@ -36,7 +37,6 @@ if(sset == 0){
 
 f0=min(tod$FInf)
 f1=max(tod$FInf)
-Ndias=6
 NN=as.numeric(f1-f0)
 Nbins=ceiling(NN/Ndias)
 dates=as.Date(c(1:Nbins),'1/1/2020',format='%d/%m/%Y')

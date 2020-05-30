@@ -224,6 +224,29 @@ todos <- function(data,verb) {
   e0 <- which(recu$edad < 60)
   e1 <- which(recu$edad >= 60)
   NRec <- c(length(recu$fecha_fis), length(e0), length(e1))
+  #### SERIES TEMPORALES
+  f0=min(data$fecha_fis)
+  f1=max(data$fecha_fis)
+  NN=as.numeric(f1-f0)
+  
+  Sinf=c(1:NN)*0
+  Sact=c(1:NN)*0
+  Sfal=c(1:NN)*0
+  Srec=c(1:NN)*0
+  dates=as.Date(c(1:NN),'1/1/2020',format='%d/%m/%Y')
+
+  for (i in 1:NN){
+     d=f0+i-1
+     dates[i]=d
+
+     w=which(data$fecha_fis == d)
+     Sinf[i]=length(w)
+     w=which(falle$fecha_mue == d)
+     Sfal[i]=length(w)
+     w=which(recu$fecha_alta == d)
+     Srec[i]=length(w)
+     Sact[i]=Sinf[i]-Sfal[i]-Srec[i]
+  }
 
   if(verb){
      print(c("Summario:"))
@@ -231,8 +254,9 @@ todos <- function(data,verb) {
   return(list(
     NInf = NInf, EdadInf=data$edad, FInf=data$fecha_fis,
     NAct = Nact, EdadAct=activo$edad, FAct=activo$fecha_fis,
-    NFal = NFal, EdadFal=falle$edad, FFal=falle$mue, 
-    NRec = NRec, EdadRec=recu$edad, FRec=recu$alta
+    NFal = NFal, EdadFal=falle$edad, FFal=falle$fecha_mue, 
+    NRec = NRec, EdadRec=recu$edad, FRec=recu$fecha_alta,
+    dates = dates, Sinf = Sinf, Srec = Srec, Sfal = Sfal, Sact = Sact
   ))
 }
 
