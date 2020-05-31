@@ -233,19 +233,47 @@ todos <- function(data,verb) {
   Sact=c(1:NN)*0
   Sfal=c(1:NN)*0
   Srec=c(1:NN)*0
+  
+  Sinf0=Srec
+  Sinf1=Srec
+  Srec0=Srec
+  Srec1=Srec
+  Sfal0=Srec
+  Sfal1=Srec
+  Sact0=Srec
+  Sact1=Srec
+
   dates=as.Date(c(1:NN),'1/1/2020',format='%d/%m/%Y')
 
   for (i in 1:NN){
      d=f0+i-1
      dates[i]=d
 
-     w=which(data$fecha_fis == d)
-     Sinf[i]=length(w)
-     w=which(falle$fecha_mue == d)
-     Sfal[i]=length(w)
-     w=which(recu$fecha_alta == d)
-     Srec[i]=length(w)
+     w0=which(data$fecha_fis == d)
+     Sinf[i]=length(w0)
+     w = which(data$edad[w0] < 60)
+     Sinf0[i]=length(w)
+     w = which(data$edad[w0] >= 60)
+     Sinf1[i]=length(w)
+
+     w0=which(falle$fecha_mue == d)
+     Sfal[i]=length(w0)
+     w = which(falle$edad[w0] < 60)
+     Sfal0[i]=length(w)
+     w = which(falle$edad[w0] >= 60)
+     Sfal1[i]=length(w)
+
+     w0=which(recu$fecha_alta == d)
+     Srec[i]=length(w0)
+     w = which(recu$edad[w0] < 60)
+     Srec0[i]=length(w)
+     w = which(recu$edad[w0] >= 60)
+     Srec1[i]=length(w)
+
      Sact[i]=Sinf[i]-Sfal[i]-Srec[i]
+
+     Sact0[i]=Sinf0[i]-Sfal0[i]-Srec0[i]
+     Sact1[i]=Sinf1[i]-Sfal1[i]-Srec1[i]
   }
 
   if(verb){
@@ -256,7 +284,9 @@ todos <- function(data,verb) {
     NAct = Nact, EdadAct=activo$edad, FAct=activo$fecha_fis,
     NFal = NFal, EdadFal=falle$edad, FFal=falle$fecha_mue, 
     NRec = NRec, EdadRec=recu$edad, FRec=recu$fecha_alta,
-    dates = dates, Sinf = Sinf, Srec = Srec, Sfal = Sfal, Sact = Sact
+    dates = dates, Sinf = Sinf, Srec = Srec, Sfal = Sfal, Sact = Sact,
+    Sinf0 = Sinf0, Srec0 = Srec0, Sfal0 = Sfal0, Sact0 = Sact0,
+    Sinf1 = Sinf1, Srec1 = Srec1, Sfal1 = Sfal1, Sact1 = Sact1
   ))
 }
 

@@ -71,10 +71,10 @@ crec=cumsum(Nrec)
 cinf=cumsum(Ninf)
 cmue=cumsum(Nmue)
 Npob=3.5E6
-gam=crec/cinf
-mu =cmue/cinf
+gam=crec/cinf/Ndias
+mu =cmue/cinf/Ndias
 a=1./5.
-bet=cumsum(Ninf)/dd/Ndias
+bet=Ninf/dd
 #print(Nmue)
 #print(cumsum(Nmue))
 #print(Nrec)
@@ -83,7 +83,8 @@ bet=cumsum(Ninf)/dd/Ndias
 #print(cumsum(Ninf))
 #R0 = a*bet*No/((mu+a)(mu+gam))
 print('################## R0 R0')
-print(bet*a/((a+mu)*(gam+mu)))
+#print(bet*a/((a+mu)*(gam+mu)))
+print(bet/(mu+gam))
 print('##################')
 print(dates)
 print('################## Betta')
