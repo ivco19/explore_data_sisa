@@ -87,4 +87,77 @@
  write.csv(to_fit,file="data_to_fit_BM.csv",row.names = FALSE)
 
 
+ d_nac=load_data_nac()
+ c_nac=subset(d_nac,(clasificacion_resumen=="Confirmado"))
+
+ c=c_nac$F_CASO
+ fecha_min=min(c)
+ fecha_max=max(c)
+ diff=as.numeric(fecha_max-fecha_min)
+ breaks=seq(-0.5,diff+0.5,by=1)
+ f_nac=subset(d_nac,(fallecido=="SI"))
+ 
+ conf_nac = acumula_serie(c_nac,"F_CASO",fecha_min,breaks)
+ fall_nac = acumula_serie(f_nac,"fecha_fallecimiento",fecha_min,breaks)
+
+ to_fit <- data.frame(
+      fecha=as.Date(0:diff+fecha_min),
+      dia = conf_nac$dias,
+      confirmados_dia  = conf_nac$his,
+      confirmados_acum  = conf_nac$cum,
+      fallecidos_dia   = fall_nac$his,
+      fallecidos_acum   = fall_nac$cum
+ )
+ 
+ write.csv(to_fit,file="data_to_fit_nacional.csv",row.names = FALSE)
+
+ d_nac=load_data_nac()
+ #c_nac=subset(d_nac,(clasificacion_resumen=="Confirmado"))
+ c_nac=subset(d_nac,(clasificacion_resumen=="Confirmado" & provincia_carga=="Córdoba"))
+
+ c=c_nac$F_CASO
+ fecha_min=min(c)
+ fecha_max=max(c)
+ diff=as.numeric(fecha_max-fecha_min)
+ breaks=seq(-0.5,diff+0.5,by=1)
+ f_nac=subset(d_nac,(fallecido=="SI" & provincia_carga=="Córdoba"))
+ 
+ conf_nac = acumula_serie(c_nac,"F_CASO",fecha_min,breaks)
+ fall_nac = acumula_serie(f_nac,"fecha_fallecimiento",fecha_min,breaks)
+
+ to_fit <- data.frame(
+      fecha=as.Date(0:diff+fecha_min),
+      dia = conf_nac$dias,
+      confirmados_dia  = conf_nac$his,
+      confirmados_acum  = conf_nac$cum,
+      fallecidos_dia   = fall_nac$his,
+      fallecidos_acum   = fall_nac$cum
+ )
+ 
+ write.csv(to_fit,file="data_to_fit_cba_public.csv",row.names = FALSE)
+
+ d_nac=load_data_nac()
+ #c_nac=subset(d_nac,(clasificacion_resumen=="Confirmado"))
+ c_nac=subset(d_nac,(clasificacion_resumen=="Confirmado" & provincia_carga=="CABA"))
+
+ c=c_nac$F_CASO
+ fecha_min=min(c)
+ fecha_max=max(c)
+ diff=as.numeric(fecha_max-fecha_min)
+ breaks=seq(-0.5,diff+0.5,by=1)
+ f_nac=subset(d_nac,(fallecido=="SI" & provincia_carga=="CABA"))
+ 
+ conf_nac = acumula_serie(c_nac,"F_CASO",fecha_min,breaks)
+ fall_nac = acumula_serie(f_nac,"fecha_fallecimiento",fecha_min,breaks)
+
+ to_fit <- data.frame(
+      fecha=as.Date(0:diff+fecha_min),
+      dia = conf_nac$dias,
+      confirmados_dia  = conf_nac$his,
+      confirmados_acum  = conf_nac$cum,
+      fallecidos_dia   = fall_nac$his,
+      fallecidos_acum   = fall_nac$cum
+ )
+ 
+ write.csv(to_fit,file="data_to_fit_caba_public.csv",row.names = FALSE)
 

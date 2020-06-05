@@ -10,12 +10,14 @@
 
  
  c_nac=subset(d_nac,(clasificacion_resumen=="Confirmado" & provincia_carga=="Córdoba"))
- c_prov=subset(d_prov,(clasificacion_resumen=="Confirmado" & provincia_carga=="Córdoba"))
- c=as.Date(c_nac$fecha_fis)
+ c_prov=d_prov #subset(d_prov,(clasificacion_resumen=="Confirmado" & provincia_carga=="Córdoba"))
+ c=c_nac$F_CASO
  fecha_min=min(c)
- cc_prov=subset(d_prov,clasificacion_resumen=="Confirmado")
+ fecha_max=max(c)
+ diff=as.numeric(fecha_max-fecha_min)
+ breaks=seq(-0.5,diff+0.5,by=1)
  pdf("acumulado_confirmados_datos_vs.pdf")
- plot_casos(c_nac,fecha_min,title="Acumulado Córdoba")
- oplot_casos(c_prov,col="red",fecha_min)
- oplot_casos(cc_prov,col="blue",fecha_min)
+ plot_casos(c_nac,"F_CASO",fecha_min,breaks,title="Acumulado Córdoba")
+ oplot_casos(c_prov,"F_CASO",fecha_min,breaks,col="red")
  dev.off()
+

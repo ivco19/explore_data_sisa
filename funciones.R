@@ -64,9 +64,15 @@
  load_data_nac <-function()
  {
      data <- read.csv2("covid_19_casos.csv")
-     data$fis                 = as.Date(data$fis)
-     data$fecha_diagnostico   = as.Date(data$fecha_diagnostico)
-     data$fecha_fallecimiento = as.Date(data$fecha_fallecimiento)
+     data$fis                 = as.Date(data$fis,format="%Y-%m-%d")
+     data$fecha_diagnostico   = as.Date(data$fecha_diagnostico,format="%Y-%m-%d")
+     data$fecha_fallecimiento = as.Date(data$fecha_fallecimiento,format="%Y-%m-%d")
+
+     data$F_CASO=data$fis 
+     ii=is.na(data$fis)
+     data$F_CASO[ii]=data$fecha_diagnostico[ii]
+
+     return(data)
  }
 
 
