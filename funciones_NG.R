@@ -68,7 +68,8 @@ prepara_datos <- function(name, type) {
     #### Posibles valores de ClassSel = [Fallecido, Recuperado, Activo]
     w <- which(ClassSel == "NO")
     if (length(w) != 0) {
-      print("OJO< NO ACTIVO PERO NO RECUPERADO NI FALLECIDO")
+      print(c("OJO< NO ACTIVO PERO NO RECUPERADO NI FALLECIDO",length(w),w))
+      ClassSel[w] <- "Recuperado"
     }
 
     ##### QUIERO LA MISMA DATA ASI QUE LIMPIO Y USO LO QUE NECESITO
@@ -214,24 +215,78 @@ todos <- function(data,verb) {
   
   e0 <- which(activo$edad < 60)
   e1 <- which(activo$edad >= 60)
-  Nact <- c(length(activo$fecha_fis), length(activo$fecha_fis[ei0]), length(activo$fecha_fis[ei1]))
+  Nact <- c(length(activo$edad), length(e0), length(e1))
   
   e0 <- which(falle$edad < 60)
   e1 <- which(falle$edad >= 60)
-  NFal <- c(length(falle$fecha_fis), length(falle$fecha_fis[ei0]), length(falle$fecha_fis[ei1]))
+  NFal <- c(length(falle$fecha_fis), length(e0), length(e1))
   
   e0 <- which(recu$edad < 60)
   e1 <- which(recu$edad >= 60)
-  NRec <- c(length(recu$fecha_fis), length(recu$fecha_fis[ei0]), length(recu$fecha_fis[ei1]))
+  NRec <- c(length(recu$fecha_fis), length(e0), length(e1))
+  #### SERIES TEMPORALES
+  f0=min(data$fecha_fis)
+  f1=max(data$fecha_fis)
+  NN=as.numeric(f1-f0)
+  
+  Sinf=c(1:NN)*0
+  Sact=c(1:NN)*0
+  Sfal=c(1:NN)*0
+  Srec=c(1:NN)*0
+  
+  Sinf0=Srec
+  Sinf1=Srec
+  Srec0=Srec
+  Srec1=Srec
+  Sfal0=Srec
+  Sfal1=Srec
+  Sact0=Srec
+  Sact1=Srec
+
+  dates=as.Date(c(1:NN),'1/1/2020',format='%d/%m/%Y')
+
+  for (i in 1:NN){
+     d=f0+i-1
+     dates[i]=d
+
+     w0=which(data$fecha_fis == d)
+     Sinf[i]=length(w0)
+     w = which(data$edad[w0] < 60)
+     Sinf0[i]=length(w)
+     w = which(data$edad[w0] >= 60)
+     Sinf1[i]=length(w)
+
+     w0=which(falle$fecha_mue == d)
+     Sfal[i]=length(w0)
+     w = which(falle$edad[w0] < 60)
+     Sfal0[i]=length(w)
+     w = which(falle$edad[w0] >= 60)
+     Sfal1[i]=length(w)
+
+     w0=which(recu$fecha_alta == d)
+     Srec[i]=length(w0)
+     w = which(recu$edad[w0] < 60)
+     Srec0[i]=length(w)
+     w = which(recu$edad[w0] >= 60)
+     Srec1[i]=length(w)
+
+     Sact[i]=Sinf[i]-Sfal[i]-Srec[i]
+
+     Sact0[i]=Sinf0[i]-Sfal0[i]-Srec0[i]
+     Sact1[i]=Sinf1[i]-Sfal1[i]-Srec1[i]
+  }
 
   if(verb){
      print(c("Summario:"))
   }
   return(list(
-    NInf = NInf, EdadInf=data$edad, FisInf=data$fecha_fis,
-    NAct = Nact, EdadAct=activo$edad, FisAct=activo$fecha_fis,
-    NFal = NFal, EdadFal=falle$edad, FisAct=falle$fecha_fis, 
-    NRec = NRec, EdadRec=recu$edad, FisRec=recu$fecha_fis
+    NInf = NInf, EdadInf=data$edad, FInf=data$fecha_fis,
+    NAct = Nact, EdadAct=activo$edad, FAct=activo$fecha_fis,
+    NFal = NFal, EdadFal=falle$edad, FFal=falle$fecha_mue, 
+    NRec = NRec, EdadRec=recu$edad, FRec=recu$fecha_alta,
+    dates = dates, Sinf = Sinf, Srec = Srec, Sfal = Sfal, Sact = Sact,
+    Sinf0 = Sinf0, Srec0 = Srec0, Sfal0 = Sfal0, Sact0 = Sact0,
+    Sinf1 = Sinf1, Srec1 = Srec1, Sfal1 = Sfal1, Sact1 = Sact1
   ))
 }
 
