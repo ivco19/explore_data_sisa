@@ -13,7 +13,7 @@
  #		provincia_carga=="Córdoba")
 
  #ss=split_cases(d_prov)
- ss=split_cases_bm(d_prov)
+ ss=split_cases(d_prov)
  c_prov=ss[["confirmados"]]
  a_prov=ss[["activos"]]
  r_prov=ss[["recuperados"]]
@@ -26,6 +26,43 @@
  #tdead=FECHA_FALLECIMIENTO
  tdead="F_MUERTE"
 
+ ##datos sin separar por edad #####################################################################################
+
+ c=as.Date(c_prov[[tfis]])
+ fecha_min=min(c)
+ ff=d_prov[[tfis]]
+ max_fis=max(as.numeric(ff[!is.na(ff)]-fecha_min))
+ ff=d_prov[[trec]]
+ max_mod=max(as.numeric(ff[!is.na(ff)]-fecha_min))
+ ff=d_prov[[tdead]]
+ max_fall=max(as.numeric(ff[!is.na(ff)]-fecha_min))
+
+ maxf=max(c(max_fis,max_mod,max_fall))
+
+ breaks=seq(-0.5,maxf+0.5,by=1)
+
+ conf = acumula_serie(c_prov,tfis,fecha_min,breaks)
+ act  = acumula_serie(a_prov,tfis,fecha_min,breaks)
+ rec  = acumula_serie(r_prov,trec,fecha_min,breaks)
+ fall = acumula_serie(f_prov,tdead,fecha_min,breaks)
+
+ to_fit <- data.frame(
+      fecha=as.Date(0:maxf+fecha_min),
+      dia = conf$dias,
+      confirmados_diarios   = conf$his,
+      confirmados_acumulados= conf$cum,
+      activos_diarios       = act$his,
+      activos_acumulados    = act$cum,
+      recuperados_diarios   = rec$his,
+      recuperados_acumulados= rec$cum,
+      fallecidos_diarios    = fall$his,
+      fallecidos_acumulados = fall$cum
+ )
+
+ #write.csv(to_fit,file="data_to_fit.csv",row.names = FALSE)
+ write.csv(to_fit,file="data_to_fit_BM-sin_edad.csv",row.names = FALSE)
+
+ ##################################################################################################################
 
  c=as.Date(c_prov[[tfis]])
  fecha_min=min(c)
@@ -41,20 +78,20 @@
 
  breaks=seq(-0.5,maxf+0.5,by=1)
 
- c_prov=subset(ss[["confirmados"]], EDAD>=60)
- a_prov=subset(ss[["activos"]], EDAD>=60)
- r_prov=subset(ss[["recuperados"]], EDAD>=60)
- f_prov=subset(ss[["fallecidos"]], EDAD>=60)
+ c_prov=subset(ss[["confirmados"]], EDAD_ACTUAL>=60)
+ a_prov=subset(ss[["activos"]], EDAD_ACTUAL>=60)
+ r_prov=subset(ss[["recuperados"]], EDAD_ACTUAL>=60)
+ f_prov=subset(ss[["fallecidos"]], EDAD_ACTUAL>=60)
      
  conf_myrs = acumula_serie(c_prov,tfis,fecha_min,breaks)
  act_myrs  = acumula_serie(a_prov,tfis,fecha_min,breaks)
  rec_myrs  = acumula_serie(r_prov,trec,fecha_min,breaks)
  fall_myrs = acumula_serie(f_prov,tdead,fecha_min,breaks)
 
- c_prov=subset(ss[["confirmados"]], EDAD<60)
- a_prov=subset(ss[["activos"]], EDAD<60)
- r_prov=subset(ss[["recuperados"]], EDAD<60)
- f_prov=subset(ss[["fallecidos"]], EDAD<60)
+ c_prov=subset(ss[["confirmados"]], EDAD_ACTUAL<60)
+ a_prov=subset(ss[["activos"]], EDAD_ACTUAL<60)
+ r_prov=subset(ss[["recuperados"]], EDAD_ACTUAL<60)
+ f_prov=subset(ss[["fallecidos"]], EDAD_ACTUAL<60)
 
  conf_men = acumula_serie(c_prov,tfis,fecha_min,breaks)
  act_men  = acumula_serie(a_prov,tfis,fecha_min,breaks)
