@@ -88,12 +88,13 @@
      return(data)
  }
 
-
  load_data_prov <-function()
  {
      #d_prov <- read.csv("SISA-12-05_pilar.csv")
      #d_prov <- read.csv("BM_2020.05.15.csv")
-     d_prov <- read.csv2("SISA_13_07_08_35-Pilar.csv")
+     #d_prov <- read.csv2("SISA_13_07_08_35-Pilar.csv")
+     #d_prov <- read.csv2("SISA_22_07_12_59.csv")
+     d_prov <- read.csv2("SISA_27_08.csv")
      #d_prov =subset(d_prov,F_CONF!="")
      d_prov <- subset(d_prov,CLASIF_RESUMEN=="Confirmado")
 
@@ -129,6 +130,19 @@
      d_prov$F_CASO=F_CASO
      d_prov$F_ALTA_M=as.Date(repair_date(d_prov[[faltaname]]),format="%d/%m/%Y")
      d_prov$F_MUERTE=as.Date(repair_date(d_prov[[fmuertename]]),format="%d/%m/%Y")
+
+     ii=d_prov$FECHA_INTERNACION!=""
+     jj=( d_prov$FECHA_ALTA_MEDICA[ii])!=""
+
+     entrada=as.Date(repair_date((d_prov$FECHA_INTERNACION[ii])[jj]),format="%d/%m/%Y")
+     salida=as.Date(repair_date((d_prov$FECHA_ALTA_MEDICA[ii])[jj]),format="%d/%m/%Y")
+
+     diff=as.numeric(salida-entrada)
+     diff=diff[diff <100]
+     mean(diff)
+
+
+
      return(d_prov)
  }
  split_cases <- function(data)

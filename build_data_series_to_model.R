@@ -28,6 +28,7 @@
 
  ##datos sin separar por edad #####################################################################################
 
+
  c=as.Date(c_prov[[tfis]])
  fecha_min=min(c)
  ff=d_prov[[tfis]]
@@ -61,6 +62,28 @@
 
  #write.csv(to_fit,file="data_to_fit.csv",row.names = FALSE)
  write.csv(to_fit,file="data_to_fit_BM-sin_edad.csv",row.names = FALSE)
+
+ ii=d_prov$FECHA_INTERNACION!=""
+ jj=( d_prov$FECHA_ALTA_MEDICA[ii])!=""
+
+ entrada=as.Date(repair_date((d_prov$FECHA_INTERNACION[ii])[jj]),format="%d/%m/%Y")
+ salida =as.Date(repair_date((d_prov$FECHA_ALTA_MEDICA[ii])[jj]),format="%d/%m/%Y")
+
+ diff=as.numeric(salida-entrada)
+ diff=diff[diff <100]
+ print("permanencia media en el hospital:")
+ print(mean(diff))
+
+
+ c=as.Date(c_prov[[tfis]])
+ fecha_max=max(c)
+
+ fintern=as.Date(repair_date((d_prov$FECHA_INTERNACION[ii])),format="%d/%m/%Y")
+ fmin=min(fintern)
+
+ print("rate de hospitalizacion:")
+ print(length(fintern)/as.numeric(fecha_max - fmin)/(conf$his[length(conf$his)]))
+
 
  ##################################################################################################################
 
