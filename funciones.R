@@ -94,7 +94,8 @@
      #d_prov <- read.csv("BM_2020.05.15.csv")
      #d_prov <- read.csv2("SISA_13_07_08_35-Pilar.csv")
      #d_prov <- read.csv2("SISA_22_07_12_59.csv")
-     d_prov <- read.csv2("SISA_27_08.csv")
+     #d_prov <- read.csv2("SISA_27_08.csv")
+     d_prov <- read.csv2("SISA-10-09-2020_13-46-02.csv")
      #d_prov =subset(d_prov,F_CONF!="")
      d_prov <- subset(d_prov,CLASIF_RESUMEN=="Confirmado")
 
@@ -147,25 +148,37 @@
  }
  split_cases <- function(data)
  {
+
+	 #clasificacion previa a septiembre
+       #"Caso confirmado - No Activo por criterio de laboratorio"           ,# [1]
+       #"Caso confirmado - No activo (por tiempo de evolución)"             ,# [2]
+       #"Caso confirmado - Activo "                                         ,# [3]
+       #"Caso confirmado - Activo Internado"                                ,# [4]
+       #"Caso confirmado - Fallecido"                                       )# [5]
+
+	 #desde el 10 de septiembre
      clasif=c(
-       "Caso confirmado - No Activo por criterio de laboratorio"           ,# [1]
-       "Caso confirmado - No activo (por tiempo de evolución)"             ,# [2]
-       "Caso confirmado - Activo "                                         ,# [3]
-       "Caso confirmado - Activo Internado"                                ,# [4]
-       "Caso confirmado - Fallecido"                                       )# [5]
-#      "Caso confirmado - No activo (por laboratorio y tiempo de evolución)")# [6]
+       "Caso confirmado por laboratorio - No activo (por tiempo de evolución)",# [1]                     
+       "Caso confirmado por criterio clínico-epidemiológico  - No activo (por tiempo de evolución)",# [2]
+       "Caso confirmado por laboratorio - Activo",# [3]                                                  
+       "Caso confirmado por laboratorio - Activo Internado",# [4]                                        
+       "Caso confirmado por laboratorio - Fallecido",#[5]                                               
+        #categorias nuevas luego del 10 de sept.
+       "Caso confirmado por laboratorio - No Activo por criterio de laboratorio",#[6]                   
+       "Caso confirmado por criterio clinico-epidemiológico - Activo ")#[7]
 
 
      confirmados=subset(data,CLASIF_RESUMEN=="Confirmado")
      recuperados=subset(data,
             	   (CLASIFICACION==clasif[1] |
-            	   CLASIFICACION==clasif[2] #|
-#            	   CLASIFICACION==clasif[6]
+            	   CLASIFICACION==clasif[2] |
+		   CLASIFICACION==clasif[6]
 		   )
                     )
      activos=subset(data,
             	    CLASIFICACION==clasif[3] |
-            	    CLASIFICACION==clasif[4] )
+            	    CLASIFICACION==clasif[4] |
+                    CLASIFICACION==clasif[7])
      
      fallecidos=subset(data,
             	    CLASIFICACION==clasif[5] )
