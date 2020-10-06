@@ -60,6 +60,8 @@
       fallecidos_acumulados = fall$cum
  )
 
+ print("dia 220:")
+ print(as.Date(220+11+fecha_min)) #11 viene de write_js.R en la calculadora
  #write.csv(to_fit,file="data_to_fit.csv",row.names = FALSE)
  write.csv(to_fit,file="data_to_fit_BM-sin_edad.csv",row.names = FALSE)
 

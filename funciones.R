@@ -95,7 +95,10 @@
      #d_prov <- read.csv2("SISA_13_07_08_35-Pilar.csv")
      #d_prov <- read.csv2("SISA_22_07_12_59.csv")
      #d_prov <- read.csv2("SISA_27_08.csv")
-     d_prov <- read.csv2("SISA-10-09-2020_13-46-02.csv")
+     #d_prov <- read.csv2("SISA-10-09-2020_13-46-02.csv")
+     #d_prov <- read.csv2("CORDOBA-21-09-2020_13-46-16.csv")
+     #d_prov <- read.csv2("CORDOBA-23-09-2020_16-46-12.csv")
+     d_prov <- read.csv2("CORDOBA-03-10-2020_07-46-01.csv")
      #d_prov =subset(d_prov,F_CONF!="")
      d_prov <- subset(d_prov,CLASIF_RESUMEN=="Confirmado")
 
