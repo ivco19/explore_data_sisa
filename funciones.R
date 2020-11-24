@@ -98,7 +98,11 @@
      #d_prov <- read.csv2("SISA-10-09-2020_13-46-02.csv")
      #d_prov <- read.csv2("CORDOBA-21-09-2020_13-46-16.csv")
      #d_prov <- read.csv2("CORDOBA-23-09-2020_16-46-12.csv")
-     d_prov <- read.csv2("CORDOBA-03-10-2020_07-46-01.csv")
+     #d_prov <- read.csv2("CORDOBA-03-10-2020_07-46-01.csv")
+     #d_prov <- read.csv2("CORDOBA-13-10-2020_09-46-44.csv")
+     #d_prov <- read.csv("CORDOBA-28-10-2020_16-46-36.csv")
+#     d_prov <- read.csv("CORDOBA-12-11-20_15-01.csv")
+     d_prov <- read.csv("CORDOBA-22-11-2020_15-01-51.csv")
      #d_prov =subset(d_prov,F_CONF!="")
      d_prov <- subset(d_prov,CLASIF_RESUMEN=="Confirmado")
 
@@ -107,6 +111,7 @@
      fmuertename="FECHA_FALLECIMIENTO"
      
      d_prov[[fisname]]=as.Date(repair_date(d_prov[[fisname]]),format="%d/%m/%Y")
+     #d_prov[[fisname]]=as.Date(repair_date(d_prov[[fisname]]),format="%m/%d/%Y")
      #a los asintomáticos les asigno la fecha de inicio de sintomas 
      #que está tambien en otro formato
      
@@ -134,12 +139,16 @@
      d_prov$F_CASO=F_CASO
      d_prov$F_ALTA_M=as.Date(repair_date(d_prov[[faltaname]]),format="%d/%m/%Y")
      d_prov$F_MUERTE=as.Date(repair_date(d_prov[[fmuertename]]),format="%d/%m/%Y")
+     #d_prov$F_ALTA_M=as.Date(repair_date(d_prov[[faltaname]]),format="%m/%d/%Y")
+     #d_prov$F_MUERTE=as.Date(repair_date(d_prov[[fmuertename]]),format="%m/%d/%Y")
 
      ii=d_prov$FECHA_INTERNACION!=""
      jj=( d_prov$FECHA_ALTA_MEDICA[ii])!=""
 
      entrada=as.Date(repair_date((d_prov$FECHA_INTERNACION[ii])[jj]),format="%d/%m/%Y")
      salida=as.Date(repair_date((d_prov$FECHA_ALTA_MEDICA[ii])[jj]),format="%d/%m/%Y")
+     #entrada=as.Date(repair_date((d_prov$FECHA_INTERNACION[ii])[jj]),format="%m/%d/%Y")
+     #salida=as.Date(repair_date((d_prov$FECHA_ALTA_MEDICA[ii])[jj]),format="%m/%d/%Y")
 
      diff=as.numeric(salida-entrada)
      diff=diff[diff <100]

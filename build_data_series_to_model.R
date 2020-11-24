@@ -70,6 +70,8 @@
 
  entrada=as.Date(repair_date((d_prov$FECHA_INTERNACION[ii])[jj]),format="%d/%m/%Y")
  salida =as.Date(repair_date((d_prov$FECHA_ALTA_MEDICA[ii])[jj]),format="%d/%m/%Y")
+ #entrada=as.Date(repair_date((d_prov$FECHA_INTERNACION[ii])[jj]),format="%m/%d/%Y")
+ #salida =as.Date(repair_date((d_prov$FECHA_ALTA_MEDICA[ii])[jj]),format="%m/%d/%Y")
 
  diff=as.numeric(salida-entrada)
  diff=diff[diff <100]
@@ -81,6 +83,7 @@
  fecha_max=max(c)
 
  fintern=as.Date(repair_date((d_prov$FECHA_INTERNACION[ii])),format="%d/%m/%Y")
+ #fintern=as.Date(repair_date((d_prov$FECHA_INTERNACION[ii])),format="%m/%d/%Y")
  fmin=min(fintern)
 
  print("rate de hospitalizacion:")
